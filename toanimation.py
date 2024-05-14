@@ -9,6 +9,7 @@ import numpy as np
 from mathutils import Quaternion
 from mathutils import Vector
 
+joint_rotations = np.random.rand(len(BASE_JOINT_NAMES), 4)
 # Base joint names (names of all fk_controller)
 BASE_JOINT_NAMES = [
     'Spine1.001', 'Spine2.001', 'Neck.001', 'Head.001',
@@ -61,7 +62,7 @@ def apply_ik(location):
     if not armature:
         print("Armature not found")
         return
-
+     # Iterate over the Blend files 
     # Iterate over the base joint names
     for joint_name in BASE_JOINT_NAMES:
         bone = armature.pose.bones.get(joint_name)
@@ -74,6 +75,23 @@ def apply_ik(location):
     
 #Step 3: Again convert IK to FK
 
-apply_ik(l)
-apply
+
+def apply_fk_from_ik(joint_rotations):
+    armature = bpy.data.objects.get('BAZeel')
+    if not armature:
+        
+        print("Armature not found")
+        return
+
+    # Iterate over the base joint names
+    for joint_idx, joint_name in enumerate(BASE_JOINT_NAMES):
+        bone = armature.pose.bones.get(joint_name)
+        if bone:
+            # Assuming joint_rotations contains quaternions (w, x, y, z)
+            quaternion_rotation = joint_rotations[joint_idx]
+            bone.rotation_quaternion = Quaternion(quaternion_rotation)
+
+    print("IK to FK conversion complete!")
+
+
 
